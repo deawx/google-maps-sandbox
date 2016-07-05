@@ -10,7 +10,7 @@
  */	
 
 // Sample Colours from https://color.adobe.com/Flat-design-colors-1-color-theme-3044245/
-var colour_spectrum = ["#C74029","#FAE8CD","#128085","#385052","#F0AD44"];
+var colour_spectrum = ["#FF5335","#B29C85","#306E73","#3B424C","#1D181F"];
 
 var map;
 var google;
@@ -264,7 +264,6 @@ $(document).ready(function(){
 	
 	$("#SHOW_LEGEND").click(function(){
 		
-		console.log("Legend Toggled");
 		$(".right-flyout").toggleClass("slideInRight");
 		$(".right-flyout").toggleClass("slideOutRight");
 		$(this).parent().toggleClass("active");
