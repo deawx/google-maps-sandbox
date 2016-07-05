@@ -9,17 +9,19 @@
  *
  */	
 
-var defaultColour = "#333333"; // The default colour of a region.
+// Sample Colours from https://color.adobe.com/Flat-design-colors-1-color-theme-3044245/
+var colour_spectrum = ["#334D5C","#45B29D","#EFC94C","#E27A3F","#DF5A49"];
 
 var map;
 var google;
 var i;
 var geocoder;
-
-/* Test */
-
 var polys = [];
+var options = [];
 
+var console;
+
+/* Google Map Styles - Can always use services like snazzymaps.com to provide more artistic styles */
 var styles = [{
     
     featureType: "all",
@@ -104,6 +106,14 @@ function initialize() {
 
 }
 
+function debug_info(data, index, index_of){
+	
+	var listContainer = document.getElementById("data");
+	
+	listContainer.innerHTML = listContainer.innerHTML + "<tr><td>" + data[2] + "</td><td>" + data[1] + "</td><td class='text-right'>" + index + "</td><td>" + index_of + "</td></tr>";
+	
+}
+
 /**
  *	Creates inidivudal coordinate pairs from data passed from a KML 
  *	encoded polygon returning them as Google Maps coordinates in an
@@ -130,9 +140,9 @@ function constructNewCoordinates(polygon) {
 }
 
 /**
- *	Cycles through the KML data from the fusion table and
+ *	Cycles through the KML data from the Fusiontable and
  * 	creates a new google maps polgyon object and adds it 
- *	to an arry for collision detection with the pins.
+ *	to an array for collision detection with the pins.
  *
  *	@callback encodeAddress()
  */		
@@ -141,20 +151,15 @@ function drawMap(data) {
 	
     var rows = data.rows;
     
-    var warnings = [];
-    
     for (i in rows) {
-           
+	    
 	    var newCoordinates = [];
 	    var geometries = rows[i][0].geometries;    
-	    var rep_highlight_lee = "#6BB8C5";
-		var rep_highlight_claire = "#90C34A";
-		var rep_highlight_mark = "#ED7547";
 		var county;
 	    		
 		var infowindow = new google.maps.InfoWindow();
-		
-		if (geometries) {
+	    
+	    if (geometries) {
 	        
 	        for (var j in geometries) {
 	        
@@ -168,73 +173,58 @@ function drawMap(data) {
 			
 		}
 		
-		if(rows[i][1] === "Mark"){
+		/*
+		
+			Initalise a polygon	object for this iteration. 
+			Note the fill is missing, we will conditioanlly 
+			add this at the next step.
 			
-			county = new google.maps.Polygon({
-				paths: newCoordinates,
-				strokeColor: '#FFFFFF',
-				strokeOpacity: 1,
-				strokeWeight: 0.7,
-				fillColor: rep_highlight_mark,
-				fillOpacity: 0.5,
-				clickable: true,
-				indexID: rows[i]
+		*/
+			    
+	    county = new google.maps.Polygon({
+			paths: newCoordinates,
+			strokeColor: '#FFFFFF',
+			strokeOpacity: 1,
+			strokeWeight: 0.7,
+			fillOpacity: 0.8,
+			clickable: true,
+			indexID: rows[i]
 			
-			});
+		});
+	    
+	    var options_index = options.indexOf(rows[i][1]); // See if the "Name" value is within our options list
+
+	    if(options_index === -1){ 
 			
-		}else if(rows[i][1] === "Lee"){
+			/* 
+				If it isn't we will add it to our options array and then use the 
+				arrays length as its colour variable. (If it is the first option 
+				the colour index will be zero 				
+			*/		
 			
-			county = new google.maps.Polygon({
-				paths: newCoordinates,
-				strokeColor: '#FFFFFF',
-				strokeOpacity: 1,
-				strokeWeight: 0.7,
-				fillColor: rep_highlight_lee,
-				fillOpacity: 0.5,
-				clickable: true,
-				indexID: rows[i]
-			
-			});
-			
-		}else if(rows[i][1] === "Clare"){
-			
-			county = new google.maps.Polygon({
-				paths: newCoordinates,
-				strokeColor: '#FFFFFF',
-				strokeOpacity: 1,
-				strokeWeight: 0.7,
-				fillColor: rep_highlight_claire,
-				fillOpacity: 0.5,
-				clickable: true,
-				indexID: rows[i]
-			
-			});
-			
-		}else{
-			
-			county = new google.maps.Polygon({
-				paths: newCoordinates,
-				strokeColor: '#FFFFFF',
-				strokeOpacity: 1,
-				strokeWeight: 0.7,
-				fillColor: defaultColour,
-				fillOpacity: 0.5,
-				clickable: true,
-				indexID: rows[i]
+			options.push(rows[i][1]);
+			county.setOptions({fillColor: colour_spectrum[options.length-1]});
 				
-			});
+		}else{ // Found
 			
-			warnings.push(rows[i]);
+			/*
+				If it is found use its position as the colour marker 
+				
+			*/
+			
+			county.setOptions({fillColor: colour_spectrum[options_index]});
 			
 		}
 		
+		/* Add event listener to display custom data on the polgon. In this case all its data */
+		
 		google.maps.event.addListener(county, 'click', function(event){
 			
-			infowindow.setContent(this.indexID[2] + " - " + this.indexID[1]);
+			infowindow.setContent("<code>" + this.indexID[2] + "</code> - " + this.indexID[1]);
 			infowindow.setPosition(event.latLng);
 			infowindow.open(map);
 			
-		}); 
+		});
 		
 		polys.push(county); // Add the polygon to an array
 		
@@ -242,13 +232,20 @@ function drawMap(data) {
 
 	} // End iteration loop of all polygon sets
 	
-	console.log(warnings.length + " issues in total. These are missing info:");
+
+	console.groupCollapsed("Summary - " + options.length + " dimensions, " + rows.length + " items in total.");
+		
+		if(options.length > colour_spectrum.length){
+				
+			console.warn("More options than colours! Be careful here");
+			
+		}
+		
+		console.groupCollapsed("Dimensions");
+		for(i in options){console.log("#" + i + " " + options[i]);}
+		console.groupEnd();
 	
-	for(i in warnings){
-		
-		console.log(warnings[i][2]);
-		
-	}
+	console.groupEnd();
 	
 }
 

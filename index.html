@@ -22,7 +22,21 @@
 		
 	</head>
 	<body>
+		
+		<div class="right-flyout panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Legend</h3>
+		  </div>
+		  <div class="panel-body">
+		    Panel content
+		  </div>
+		  <ul class="list-group">
+		    <li class="list-group-item">Cras justo odio<span class="badge">14</span></li>
+		  </ul>
+		</div>
+				
 		<style>
+			
 			/* Styles to set map to full page for preview */
 			
 			html,
@@ -41,8 +55,18 @@
 			.map-full {
 				
 				width: 100% !important;
-				height: 100% !important;	
+				height: 100% !important;;	
 				position: absolute;
+				
+			}
+			
+			.right-flyout {
+				
+				position: absolute;
+				right: 10px;
+				top:	10px;
+				width: 30%;
+				z-index: 1000;
 				
 			}
 			
