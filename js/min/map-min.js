@@ -106,11 +106,12 @@ function initialize() {
 
 }
 
-function debug_info(data, index, index_of){
+
+function addToLegend(inputText, inputColourIndex){
 	
-	var listContainer = document.getElementById("data");
+	var legendContainer = document.getElementById("legend");
 	
-	listContainer.innerHTML = listContainer.innerHTML + "<tr><td>" + data[2] + "</td><td>" + data[1] + "</td><td class='text-right'>" + index + "</td><td>" + index_of + "</td></tr>";
+	legendContainer.innerHTML = legendContainer.innerHTML + '<li class="list-group-item">' + inputText + '<span style="background:' + colour_spectrum[inputColourIndex] + ';" class="badge">&nbsp;</span></li>';
 	
 }
 
@@ -204,6 +205,8 @@ function drawMap(data) {
 			
 			options.push(rows[i][1]);
 			county.setOptions({fillColor: colour_spectrum[options.length-1]});
+			
+			addToLegend(rows[i][1], options.length-1);
 				
 		}else{ // Found
 			
