@@ -1,0 +1,35 @@
+/* ===============================================================
+	
+						
+	
+=============================================================== */
+html,
+body {
+  height: 100%;
+  position: relative; }
+
+/* Styles to set map to full page for preview */
+.map-full {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute; }
+
+.navbar,
+.breadcrumb {
+  margin-bottom: 0; }
+
+.breadcrumb {
+  border-bottom: 1px solid #ccc; }
+
+.right-flyout {
+  width: 200px;
+  position: absolute;
+  right: 10px;
+  top: 100px;
+  z-index: 1000; }
+
+/* ===============================================================
+	
+						
+	
+=============================================================== */

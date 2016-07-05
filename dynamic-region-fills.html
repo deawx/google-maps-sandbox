@@ -38,25 +38,28 @@
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<div class="nav navbar-nav">
 							<li><a href="collision-detection.html">Collisions</a></li>
-							<li><a href="dynamic-region-fills.html">Dynamic Region Fills</a></li>
+							<li class="active"><a href="dynamic-region-fills.html">Dynamic Region Fills</a></li>
 							<li><a href="routes.html">Routes</a></li>
 						</div>
 					</div><!-- /.navbar-collapse -->
 				</div><!-- /.container-fluid -->
 			</nav>
-		
+			
+			<ol class="breadcrumb list-inline">
+				<li><a href="#" id="SHOW_LEGEND">Show Legend</a></li>
+			</ol>
+				
 		</header>
-
-		<div class="jumbotron">
-			
-			<div class="container">
-			
-			  <h1></h1>
-			  <p>...</p>
-			  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-		  
-			</div>
+		
+		<div id="legend_panel" class="right-flyout animated slideOutRight panel panel-default" style="display: none;">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Legend</h3>
+		  </div>
+		  <ul id="legend" class="list-group"></ul>
 		</div>
+				
+
+		<div id="map" class="map-full"></div>
 					
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -66,7 +69,7 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 		
-		<script src="js/min/map-sandbox-min.js"></script>
+		<script src="js/min/dynamic-region-fills-min.js"></script>
 
 	</body>
 
