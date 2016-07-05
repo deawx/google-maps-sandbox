@@ -18,10 +18,12 @@ var i;
 var geocoder;
 var polys = [];
 var options = [];
+var count = [];
 
 var console;
 
 /* Google Map Styles - Can always use services like snazzymaps.com to provide more artistic styles */
+
 var styles = [{
     
     featureType: "all",
@@ -86,18 +88,19 @@ function initialize() {
 	map.setOptions({styles: styles});
 
 	// Initialize JSONP request
-	var script = document.createElement('script');
-	var url = ['https://www.googleapis.com/fusiontables/v1/query?'];
 	
-	url.push('sql=');
-
+	var script = document.createElement('script');
+	
 	var query = 'SELECT geometry, rep, name FROM ' + '1BlJA1Svax75AHjS7FNY2fS4HGflwNN9m33nV289u';
 
 	var encodedQuery = encodeURIComponent(query);
 	
-	url.push(encodedQuery);
-	url.push('&callback=drawMap');
-	url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
+	var url = ['https://www.googleapis.com/fusiontables/v1/query?'];
+		url.push('sql=');
+		url.push(encodedQuery);
+		url.push('&callback=drawMap');
+		url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
+	
 	script.src = url.join('');
 
 	var body = document.getElementsByTagName('body')[0];
@@ -113,6 +116,12 @@ function initialize() {
 
 function addToLegend(inputText, inputColourIndex){
 	
+	if(inputText == ""){
+		
+		inputText = " - ";
+		
+	}
+	
 	var legendContainer = document.getElementById("legend");
 	
 	legendContainer.innerHTML = legendContainer.innerHTML + '<li class="list-group-item">' + inputText + '<span style="background:' + colour_spectrum[inputColourIndex] + ';" class="badge">&nbsp;</span></li>';
@@ -125,7 +134,7 @@ function addToLegend(inputText, inputColourIndex){
  *	array.
  *
  *	@param {Array} polygon An array of polygons from the KML data in a fusion table.
- *	@returns newCoordinates
+ *	@returns {Array} newCoordinates
  * 
  */		
 
@@ -208,26 +217,26 @@ function drawMap(data) {
 			*/		
 			
 			options.push(rows[i][1]);
-			county.setOptions({fillColor: colour_spectrum[options.length-1]});
 			
-			addToLegend(rows[i][1], options.length-1);
+			county.setOptions({fillColor: colour_spectrum[options.length-1], colourID: options.length-1});
+			
+			count[options.length-1] = 1; 				/* Add a new value to the count array and increment it */
+			
+			addToLegend(rows[i][1], options.length-1);	/* Register new option to the legend */
 				
 		}else{ // Found
 			
-			/*
-				If it is found use its position as the colour marker 
-				
-			*/
-			
-			county.setOptions({fillColor: colour_spectrum[options_index]});
-			
+			/* If it is found use its position as the colour marker */
+			count[options_index]++;
+			county.setOptions({fillColor: colour_spectrum[options_index], colourID: options_index});
+
 		}
 		
 		/* Add event listener to display custom data on the polgon. In this case all its data */
 		
 		google.maps.event.addListener(county, 'click', function(event){
 			
-			infowindow.setContent("<code>" + this.indexID[2] + "</code> - " + this.indexID[1]);
+			infowindow.setContent("<code>" + this.indexID[2] + "</code> - " + this.indexID[1] + " - " + this.colourID);
 			infowindow.setPosition(event.latLng);
 			infowindow.open(map);
 			
@@ -239,19 +248,25 @@ function drawMap(data) {
 
 	} // End iteration loop of all polygon sets
 	
+	/*	We have now finished itterating through the data from the FusionTable.
+	**  
+	*/
+	
+	/* Enable Legend View - Now its finished Loading */
+	
 	document.getElementById("SHOW_LEGEND").removeAttribute("disabled"); 
 	document.getElementById("legend_panel").removeAttribute("style");
 	
-	console.groupCollapsed("Summary - " + options.length + " dimensions, " + rows.length + " items in total.");
+	/* Display a summary of activity in the console window (using nested console groups) */
+	
+	console.group("Summary - " + options.length + " dimensions, " + rows.length + " items in total.");
 		
-		if(options.length > colour_spectrum.length){
-				
-			console.warn("More options than colours! Be careful here");
-			
-		}
+		if(options.length > colour_spectrum.length){ console.warn("More options than colours! Be careful here")}
 		
 		console.groupCollapsed("Dimensions");
-		for(i in options){console.log("#" + i + " " + options[i]);}
+		
+			for(i in options){console.log(i + ". '"+ options[i] + "' (" + count[i] + ")")}
+		
 		console.groupEnd();
 	
 	console.groupEnd();

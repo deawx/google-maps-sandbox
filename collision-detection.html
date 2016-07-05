@@ -37,27 +37,43 @@
 					</div><!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<div class="nav navbar-nav">
-							<li><a href="collision-detection.html">Collisions</a></li>
+							<li class="active"><a href="collision-detection.html">Collisions</a></li>
 							<li><a href="dynamic-region-fills.html">Dynamic Region Fills</a></li>
 							<li><a href="routes.html">Routes</a></li>
 						</div>
 					</div><!-- /.navbar-collapse -->
 				</div><!-- /.container-fluid -->
 			</nav>
-		
+			
+			<ol class="breadcrumb list-inline">
+				
+			</ol>
+				
 		</header>
-
-		<div class="jumbotron">
+		
+		<style>
+			/* Styles to set map to full page for preview */
 			
-			<div class="container">
+			html,
+			body {
+				
+				height: 100%;
+				position: relative;
+				
+			}
 			
-			  <h1></h1>
-			  <p>...</p>
-			  <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
-		  
-			</div>
-		</div>
-					
+			.map-full {
+				
+				width: 100% !important;
+				height: 100% !important;	
+				position: absolute;
+				
+			}	
+			
+		</style>
+		<div id="map" class="map-full"></div>
+		<script>var coords = [["51.731977","-0.9911895000000186"],["51.6870466","-0.6236212000000023"],["51.8229325","-0.8313161999999465"],["52.6354424","-3.303941200000054"],["52.8024774","-3.2914478000000144"],["51.7358644","-3.8704980999999634"],["48.2754852","14.327175000000011"],["50.7514815","-2.7474376999999776"],["51.71113030000001","-2.894364600000017"],["51.9618335","-3.34886640000002"],["51.77337559999999","-2.8293955000000323"],["",""],["51.9577239","-3.493389900000011"],["51.6162184","-2.8465883999999732"],["51.85676720000001","-2.98509439999998"],["52.42327539999999","-2.7148976999999377"],["51.92927949362619","-2.1925327777862"],["52.120960402979854","-2.78158664703369"],["52.07911698842119","-2.8316361904144"],["52.19539659117343","-4.1228256225586"],["51.8577348459825","-2.511336803436"],["52.268134","-2.192471"],["51.61457459673886","-2.7689838409423"],["51.488222","-1.989539"],["52.0396096","-4.466769200000044"],["51.580890819685024","-2.82992434501646"],["53.28404634767989","-3.8362731933593"],["50.39012161729853","-3.9204723834991"],["51.05277268306769","-1.2886778116226"],["50.83761612666022","-0.7754091024398"],["54.349796", "-3.243339"],];</script>
+						
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
@@ -66,7 +82,7 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 		
-		<script src="js/min/map-sandbox-min.js"></script>
+		<script src="js/min/collisions-min.js"></script>
 
 	</body>
 
