@@ -20,10 +20,32 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 		
+		<link href="bower_components/animate.css/animate.css" rel="stylesheet" />
+		
 	</head>
 	<body>
-		
-		<div class="right-flyout panel panel-default">
+		<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Google Maps API v3</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <a class="btn btn-primary navbar-btn" disabled="true" href="#" id="SHOW_LEGEND">Show Legend</a>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+		<div id="legend_panel" class="right-flyout animated slideOutRight panel panel-default" style="display: none;">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">Legend</h3>
 		  </div>
@@ -54,13 +76,15 @@
 				position: absolute;
 				
 			}
+			 
+			.navbar { margin-bottom: 0; }
 			
 			.right-flyout {
 				
+				width: 200px;
 				position: absolute;
 				right: 10px;
-				top:	10px;
-				width: 30%;
+				top:	60px;
 				z-index: 1000;
 				
 			}

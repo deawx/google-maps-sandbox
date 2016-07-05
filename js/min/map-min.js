@@ -10,7 +10,7 @@
  */	
 
 // Sample Colours from https://color.adobe.com/Flat-design-colors-1-color-theme-3044245/
-var colour_spectrum = ["#334D5C","#45B29D","#EFC94C","#E27A3F","#DF5A49"];
+var colour_spectrum = ["#C74029","#FAE8CD","#128085","#385052","#F0AD44"];
 
 var map;
 var google;
@@ -106,6 +106,10 @@ function initialize() {
 
 }
 
+/**
+ *	
+ * 
+ */		
 
 function addToLegend(inputText, inputColourIndex){
 	
@@ -235,7 +239,9 @@ function drawMap(data) {
 
 	} // End iteration loop of all polygon sets
 	
-
+	document.getElementById("SHOW_LEGEND").removeAttribute("disabled"); 
+	document.getElementById("legend_panel").removeAttribute("style");
+	
 	console.groupCollapsed("Summary - " + options.length + " dimensions, " + rows.length + " items in total.");
 		
 		if(options.length > colour_spectrum.length){
@@ -253,4 +259,17 @@ function drawMap(data) {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
+$(document).ready(function(){
+	
+	$("#SHOW_LEGEND").click(function(){
+		
+		console.log("Legend Toggled");
+		$(".right-flyout").toggleClass("slideInRight");
+		$(".right-flyout").toggleClass("slideOutRight");
+		$(this).parent().toggleClass("active");
+		
+	});
+	
+});
 
