@@ -25,46 +25,37 @@ var console;
 /* Google Map Styles - Can always use services like snazzymaps.com to provide more artistic styles */
 
 var styles = [{
-    
-    featureType: "all",
+	featureType: "all",
 	elementType: "all",
-	stylers: [
-		{ "visibility":"off" }]},
-
-		{
-	    featureType: "landscape",
-	    elementType: "all",
-	    stylers: [
-	        {
-	            "visibility":"off"
-	        }
-    ]},
-	{
-	    featureType: "water",
-	    elementType: "all",
-	    stylers: [
-	        {
-	            "visibility":"off"
-	        }
-	    ]
-	},
-	{
-		featureType: "all",
-		elementType: "labels",
-		stylers: [
-			{ 	
-				"visibility": "off" 
-				
-			}
-		]
-	}];
+	stylers: [{
+		"visibility": "off"
+	}]
+}, {
+	featureType: "landscape",
+	elementType: "all",
+	stylers: [{
+		"visibility": "off"
+	}]
+}, {
+	featureType: "water",
+	elementType: "all",
+	stylers: [{
+		"visibility": "off"
+	}]
+}, {
+	featureType: "all",
+	elementType: "labels",
+	stylers: [{
+		"visibility": "off"
+	}]
+}];
 	
 /**
  *	Inital setup of the google map instance, applies styles, sets up geocoder
  *  and the building of the SQL query from the Fusion Table to return the 
  *	data for the map.
  *
- *	Fusion Table In Use - https://drive.google.com/open?id=18BaQWBYUXGAlWncARIpac36LvM_a8UrjXWEwoI_M
+ *	FusionTable In Use - https://drive.google.com/open?id=18BaQWBYUXGAlWncARIpac36LvM_a8UrjXWEwoI_M
  */		
  
 function initialize() {
@@ -99,7 +90,7 @@ function initialize() {
 		url.push('sql=');
 		url.push(encodedQuery);
 		url.push('&callback=drawMap');
-		url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
+		url.push('&key=AIzaSyC2enzPhmc4x2OjaGTLhJQ9klt9boTUmtY');
 	
 	script.src = url.join('');
 
@@ -202,7 +193,8 @@ function drawMap(data) {
 			strokeWeight: 0.7,
 			fillOpacity: 0.8,
 			clickable: true,
-			indexID: rows[i]
+			indexID: rows[i],
+			zIndex: -10
 			
 		});
 	    
@@ -236,8 +228,9 @@ function drawMap(data) {
 		
 		google.maps.event.addListener(county, 'click', function(event){
 			
-			infowindow.setContent("<code>" + this.indexID[2] + "</code> - " + this.indexID[1]);
+			infowindow.setContent("<code>" + this.indexID[2] + "</code> - " + this.indexID[1] + " - ");
 			infowindow.setPosition(event.latLng);
+			console.log(this);
 			infowindow.open(map);
 			
 		});
@@ -248,9 +241,22 @@ function drawMap(data) {
 
 	} // End iteration loop of all polygon sets
 	
-	/*	We have now finished itterating through the data from the FusionTable.
-	**  
+	/*	
+	**  We have now finished itterating through the data from the FusionTable.
 	*/
+	
+	/* init Label Positioning */
+		
+	var	mapLabel = new MapLabel({
+        text: options[1],
+        position: new google.maps.LatLng(52.558665, -1.483364),
+        map: map,
+        fontSize: 35,
+        align: 'right',
+        zIndex: 10000
+    });
+	
+	// mapLabel.set('position', new google.maps.LatLng(52.558665, -1.483364));
 	
 	/* Enable Legend View - Now its finished Loading */
 	

@@ -131,7 +131,7 @@ function initialize() {
 	
 	url.push(encodedQuery);
 	url.push('&callback=drawMap');
-	url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
+	url.push('&key=AIzaSyC2enzPhmc4x2OjaGTLhJQ9klt9boTUmtY');
 	script.src = url.join('');
 
 	var body = document.getElementsByTagName('body')[0];
