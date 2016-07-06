@@ -12,13 +12,14 @@
 // Sample Colours from https://color.adobe.com/Flat-design-colors-1-color-theme-3044245/
 var colour_spectrum = ["#FF5335","#B29C85","#306E73","#3B424C","#1D181F"];
 
-var map;
-var google;
+var google, map;
 var i;
 var geocoder;
 var polys = [];
 var options = [];
 var count = [];
+
+var centeres = [];
 
 var console;
 
@@ -49,6 +50,31 @@ var styles = [{
 		"visibility": "off"
 	}]
 }];
+
+function polygonCenter(poly) {
+    var lowx,
+        highx,
+        lowy,
+        highy,
+        lats = [],
+        lngs = [],
+        vertices = poly.getPath();
+
+    for(var i=0; i<vertices.length; i++) {
+      lngs.push(vertices.getAt(i).lng());
+      lats.push(vertices.getAt(i).lat());
+    }
+
+    lats.sort();
+    lngs.sort();
+    lowx = lats[0];
+    highx = lats[vertices.length - 1];
+    lowy = lngs[0];
+    highy = lngs[vertices.length - 1];
+    center_x = lowx + ((highx-lowx) / 2);
+    center_y = lowy + ((highy - lowy) / 2);
+    return (new google.maps.LatLng(center_x, center_y));
+  }
 	
 /**
  *	Inital setup of the google map instance, applies styles, sets up geocoder
@@ -192,7 +218,7 @@ function drawMap(data) {
 	    county = new google.maps.Polygon({
 			paths: newCoordinates,
 			strokeColor: '#333',
-			strokeOpacity: 0,
+			strokeOpacity: 1,
 			strokeWeight: 0.7,
 			fillOpacity: 0.4,
 			clickable: true,
@@ -226,6 +252,24 @@ function drawMap(data) {
 			county.setOptions({fillColor: colour_spectrum[options_index], colourID: options_index});
 
 		}
+		
+		/*
+		
+			add each respective cordinate pair to the corospoding option array
+			
+			centers[i].push(polygonCenter(county));
+				
+			
+		*/
+		
+		centers[i].push(polygonCenter(county));
+		
+		var marker = new google.maps.Marker({
+		    position: polygonCenter(county),
+		    map: map,
+		    title: options[i]
+		});
+		
 		
 		/* Add event listener to display custom data on the polgon. In this case all its data */
 		
@@ -282,8 +326,6 @@ function drawMap(data) {
 	google.maps.event.addListener(map, 'zoom_changed', function() {
 	    
 	    var zoom = map.getZoom();
-	
-		console.log("Zoom Level: " + zoom);
 	
 	    if (zoom <= 4 || zoom >= 9) {
 	        
