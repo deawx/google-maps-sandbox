@@ -19,6 +19,7 @@ body {
   margin-bottom: 0; }
 
 .breadcrumb {
+  min-height: 36px;
   border-bottom: 1px solid #ccc; }
 
 .right-flyout {

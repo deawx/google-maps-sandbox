@@ -9,18 +9,47 @@
  *
  */	
 
-var normalColour = "#3B424C"; // The default colour of a region.
-var highlightColour = "#FF5335"; // Colour a region turns if a collision is detectd
+var normalColour = "#3B424C"; 		// The default colour of a region.
+var highlightColour = "#FF5335"; 	// Colour a region turns if a collision is detectd
+
+var coords = [
+	["51.731977", "-0.9911895000000186"],
+	["51.6870466", "-0.6236212000000023"],
+	["51.8229325", "-0.8313161999999465"],
+	["52.6354424", "-3.303941200000054"],
+	["52.8024774", "-3.2914478000000144"],
+	["51.7358644", "-3.8704980999999634"],
+	["50.7514815", "-2.7474376999999776"],
+	["51.71113030000001", "-2.894364600000017"],
+	["51.9618335", "-3.34886640000002"],
+	["51.77337559999999", "-2.8293955000000323"],
+	["51.9577239", "-3.493389900000011"],
+	["51.6162184", "-2.8465883999999732"],
+	["51.85676720000001", "-2.98509439999998"],
+	["52.42327539999999", "-2.7148976999999377"],
+	["51.92927949362619", "-2.1925327777862"],
+	["52.120960402979854", "-2.78158664703369"],
+	["52.07911698842119", "-2.8316361904144"],
+	["52.19539659117343", "-4.1228256225586"],
+	["51.8577348459825", "-2.511336803436"],
+	["52.268134", "-2.192471"],
+	["51.61457459673886", "-2.7689838409423"],
+	["51.488222", "-1.989539"],
+	["52.0396096", "-4.466769200000044"],
+	["51.580890819685024", "-2.82992434501646"],
+	["53.28404634767989", "-3.8362731933593"],
+	["50.39012161729853", "-3.9204723834991"],
+	["51.05277268306769", "-1.2886778116226"],
+	["50.83761612666022", "-0.7754091024398"],
+	["54.349796", "-3.243339"],
+];
 
 var map;
 var google;
 var i;
 var marker; 
 var points;
-var geocoder; 
-var counties; 
-var pos_lat;
-var pos_lng;
+var geocoder;
 
 /* Test */
 
@@ -102,7 +131,7 @@ function initialize() {
 	
 	url.push(encodedQuery);
 	url.push('&callback=drawMap');
-	url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
+	url.push('&key=AIzaSyC2enzPhmc4x2OjaGTLhJQ9klt9boTUmtY');
 	script.src = url.join('');
 
 	var body = document.getElementsByTagName('body')[0];
@@ -133,9 +162,20 @@ function addMarkerWithTimeout(_lat, _lng, timeout) {
 	
 	});
 	
+	google.maps.event.addListener(marker, 'click', function(event){
+			
+		infowindow.setContent("Test");
+		infowindow.setPosition(event.latLng);
+		console.log(this);
+		infowindow.open(map);
+		
+	});  
+
+	
 	}, timeout);
 
-}
+	
+}	
 
 /**
  *	Cycles through the array of points adding a marker for each point at 
@@ -145,7 +185,7 @@ function dropPins(){
 	
 	for(i in points){	 
 	 
-	 	addMarkerWithTimeout(points[i][0], points[i][1], i * 150);
+	 	addMarkerWithTimeout(points[i][0], points[i][1], i * 50);
 	
 				 
 	}
@@ -238,7 +278,7 @@ function encodeAddress(){
 		var lat = coords[i][0];
 		var lng = coords[i][1];
 		
-		if(lat == "" && lng == ""){
+		if(lat === "" && lng === ""){
 			
 			error_count++;
 			
@@ -252,7 +292,7 @@ function encodeAddress(){
 		
 	}
 	
-	console.log("Missing data point count: " + error_count);
+	console.log("Missing Data Point Count: " + error_count);
 	
 }
 
@@ -301,16 +341,17 @@ function drawMap(data) {
 		google.maps.event.addListener(country, 'mouseover', function() {this.setOptions({});}); 
 		google.maps.event.addListener(country, 'mouseout', function() { this.setOptions({});});
 		
-	// */
+	
 	
 		google.maps.event.addListener(country, 'click', function(event){
 			
 			infowindow.setContent(this.indexID[0]);
 			infowindow.setPosition(event.latLng);
+			console.log(this);
 			infowindow.open(map);
 			
 		});  
-		
+	// */	
 		polys.push(country); // Add the polygon to an array
 		
 		country.setMap(map); // Draw the Map
