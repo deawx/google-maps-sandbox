@@ -69,14 +69,17 @@ function initialize() {
 		disableDefaultUI: true,
 		draggable: true,
 		scrollwheel: true,
-		backgroundColor: "#f2f7fb",
+		backgroundColor_old: "#f2f7fb",
+		backgroundColor: "#8799A7",
 		disableDoubleClickZoom: true,
-		clickable: true
+		clickable: true,
+		maxZoom: 10,
+		minZoom: 6
 	};
 		
 	map = new google.maps.Map(document.getElementById('map'), myOptions);
 		
-	map.setOptions({styles: styles});
+	// map.setOptions({styles: styles});
 
 	// Initialize JSONP request
 	
@@ -160,8 +163,8 @@ function drawMap(data) {
 	    
 	    var newCoordinates = [];
 	    var geometries = rows[i][0].geometries;    
-		var county;
-	    		
+		var county, options_index;
+		
 		var infowindow = new google.maps.InfoWindow();
 	    
 	    if (geometries) {
@@ -188,17 +191,17 @@ function drawMap(data) {
 			    
 	    county = new google.maps.Polygon({
 			paths: newCoordinates,
-			strokeColor: '#FFFFFF',
-			strokeOpacity: 1,
+			strokeColor: '#333',
+			strokeOpacity: 0,
 			strokeWeight: 0.7,
-			fillOpacity: 0.8,
+			fillOpacity: 0.4,
 			clickable: true,
 			indexID: rows[i],
-			zIndex: -10
+			zIndex: 0
 			
 		});
 	    
-	    var options_index = options.indexOf(rows[i][1]); // See if the "Name" value is within our options list
+	    options_index = options.indexOf(rows[i][1]); // See if the "Name" value is within our options list
 
 	    if(options_index === -1){ 
 			
@@ -228,10 +231,13 @@ function drawMap(data) {
 		
 		google.maps.event.addListener(county, 'click', function(event){
 			
-			infowindow.setContent("<code>" + this.indexID[2] + "</code> - " + this.indexID[1] + " - ");
-			infowindow.setPosition(event.latLng);
-			console.log(this);
-			infowindow.open(map);
+			if(this.indexID[1] != "None"){
+				
+				infowindow.setContent("<strong>(" + this.indexID[2] + ")</strong> Your Rep is " + this.indexID[1]);
+				infowindow.setPosition(event.latLng);
+				infowindow.open(map);
+				
+			}
 			
 		});
 		
@@ -241,22 +247,61 @@ function drawMap(data) {
 
 	} // End iteration loop of all polygon sets
 	
-	/*	
-	**  We have now finished itterating through the data from the FusionTable.
-	*/
+	/* Add Rich Marker Support - These are the large rep names */
 	
-	/* init Label Positioning */
-		
-	var	mapLabel = new MapLabel({
-        text: options[1],
-        position: new google.maps.LatLng(52.558665, -1.483364),
-        map: map,
-        fontSize: 35,
-        align: 'right',
-        zIndex: 10000
+	var marker1 = new RichMarker({
+          map: map,
+          position: new google.maps.LatLng(55.516937, -3.259087),
+          draggable: false,
+          flat: true,
+          anchor: RichMarkerPosition.MIDDLE,
+          content: "<div id='custom-marker'><h2>Clare</h2></div>"
+    });
+    
+    var marker2 = new RichMarker({
+          map: map,
+          position: new google.maps.LatLng(53.030392, -1.412525),
+          draggable: false,
+          flat: true,
+          anchor: RichMarkerPosition.MIDDLE,
+          content: "<div id='custom-marker'><h2>Mark</h2></div>"
+    });
+
+
+	var marker3 = new RichMarker({
+          map: map,
+          position: new google.maps.LatLng(50.837260, -2.358618),
+          draggable: false,
+          flat: true,
+          anchor: RichMarkerPosition.BOTTOM,
+          content: "<div id='custom-marker'><h2>Lee</h2></div>"
     });
 	
-	// mapLabel.set('position', new google.maps.LatLng(52.558665, -1.483364));
+	/* Check the zoom level and hide/show the general text markers accordingly */
+	
+	google.maps.event.addListener(map, 'zoom_changed', function() {
+	    
+	    var zoom = map.getZoom();
+	
+		console.log("Zoom Level: " + zoom);
+	
+	    if (zoom <= 4 || zoom >= 9) {
+	        
+	        marker1.setMap(null);
+	        marker2.setMap(null);
+	        marker3.setMap(null);
+	        
+	    } else {
+	        
+	        marker1.setMap(map);
+	        marker2.setMap(map);
+	        marker3.setMap(map);
+	        	        
+	    }
+	
+	});
+	
+	// END Rich Marker Support
 	
 	/* Enable Legend View - Now its finished Loading */
 	

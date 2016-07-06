@@ -34,3 +34,8 @@ body {
 						
 	
 =============================================================== */
+#custom-marker {
+  font-weight: bold;
+  text-transform: capitalize;
+  color: white;
+  text-shadow: 0 0px 5px #000; }

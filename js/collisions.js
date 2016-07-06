@@ -12,7 +12,7 @@
 var normalColour = "#3B424C"; 		// The default colour of a region.
 var highlightColour = "#FF5335"; 	// Colour a region turns if a collision is detectd
 
-var coords = [
+var coordinates = [
 	["51.731977", "-0.9911895000000186"],
 	["51.6870466", "-0.6236212000000023"],
 	["51.8229325", "-0.8313161999999465"],
@@ -260,7 +260,7 @@ function addToArray(_input){
 		
 	points.push(_input);
 	
-	if(points.length === coords.length){ checkCollision(); }
+	if(points.length === coordinates.length){ checkCollision(); }
 	
 }
 
@@ -273,10 +273,10 @@ function encodeAddress(){
 	// Test
 	var error_count = 0;
 	
-	for(i = 0; i < coords.length; i++){
+	for(i = 0; i < coordinates.length; i++){
 		
-		var lat = coords[i][0];
-		var lng = coords[i][1];
+		var lat = coordinates[i][0];
+		var lng = coordinates[i][1];
 		
 		if(lat === "" && lng === ""){
 			
@@ -354,12 +354,10 @@ function drawMap(data) {
 	// */	
 		polys.push(country); // Add the polygon to an array
 		
-		country.setMap(map); // Draw the Map
-        
+		country.setMap(map); // Draw the Map  
 	}
 	
+	loadConfig(false);
 	encodeAddress();
 	
 }
-
-google.maps.event.addDomListener(window, 'load', initialize);

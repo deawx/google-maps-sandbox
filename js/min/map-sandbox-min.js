@@ -1,0 +1,1 @@
+function initialize(){console.log("Fired")}var CONFIG;$(document).ready(function(){});
